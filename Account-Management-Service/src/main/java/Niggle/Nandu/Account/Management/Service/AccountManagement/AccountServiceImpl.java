@@ -1,8 +1,5 @@
 package Niggle.Nandu.Account.Management.Service.AccountManagement;
 
-import com.NiggleNandu.FinTech.Banking.System.Secure.Banking.App.FundTransfer.ExternalTransferRequest;
-import com.NiggleNandu.FinTech.Banking.System.Secure.Banking.App.FundTransfer.ExternalTransferResponse;
-import com.NiggleNandu.FinTech.Banking.System.Secure.Banking.App.FundTransfer.FundTransferRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +16,8 @@ public class AccountServiceImpl implements IServiceAccount {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public Account addAccount(Account account) {
@@ -89,10 +88,9 @@ public class AccountServiceImpl implements IServiceAccount {
             ExternalTransferRequest externalRequest = new ExternalTransferRequest(
             request.getAmount(),
                     Long.parseLong(request.getFromAccountNumber()),
-                    Long.parAseLong(request.getToAccountId())
+                    Long.parseLong(request.getToAccountId())
             );
 
-            RestTemplate restTemplate = new RestTemplate();
             HttpEntity<ExternalTransferRequest> httpEntity = new HttpEntity<>(externalRequest);
             ResponseEntity<ExternalTransferResponse> response = restTemplate.postForEntity(externalAPiUrl, httpEntity, ExternalTransferResponse.class);
 

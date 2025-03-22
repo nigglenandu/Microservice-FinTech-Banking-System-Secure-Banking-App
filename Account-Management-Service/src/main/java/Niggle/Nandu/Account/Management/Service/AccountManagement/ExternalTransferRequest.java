@@ -7,6 +7,12 @@ public class ExternalTransferRequest {
     private BigDecimal amount;
     private Long toAccountNumber;
 
+    public ExternalTransferRequest(BigDecimal amount, Long fromAccountNumber, Long toAccountNumber) {
+        this.amount = amount;
+        this.fromAccountNumber = fromAccountNumber;
+        this.toAccountNumber = toAccountNumber;
+    }
+
     public BigDecimal getAmount() {
         return amount;
     }
