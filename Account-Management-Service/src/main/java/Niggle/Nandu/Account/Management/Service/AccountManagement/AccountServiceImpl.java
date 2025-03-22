@@ -89,7 +89,7 @@ public class AccountServiceImpl implements IServiceAccount {
             ExternalTransferRequest externalRequest = new ExternalTransferRequest(
             request.getAmount(),
                     Long.parseLong(request.getFromAccountNumber()),
-                    Long.parseLong(request.getToAccountId())
+                    Long.parAseLong(request.getToAccountId())
             );
 
             RestTemplate restTemplate = new RestTemplate();
