@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-@Entity
 public class AccountDto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private long id;
 
     @Column(name = "account_number")
@@ -16,16 +14,6 @@ public class AccountDto {
 
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
-
-    public AccountDto(String accountNumber, BigDecimal balance, long id, AccountStatus status) {
-        this.accountNumber = accountNumber;
-        this.balance = balance;
-        this.id = id;
-        this.status = status;
-    }
-
-    public AccountDto() {
-    }
 
     public AccountStatus getStatus() {
         return status;
