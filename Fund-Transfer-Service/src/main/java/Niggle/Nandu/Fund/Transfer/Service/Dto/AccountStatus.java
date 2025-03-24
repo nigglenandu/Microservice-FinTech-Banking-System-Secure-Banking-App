@@ -1,4 +1,4 @@
-package Niggle.Nandu.Account.Management.Service.AccountManagement;
+package Niggle.Nandu.Fund.Transfer.Service.Dto;
 
 public enum AccountStatus {
     ACTIVE,

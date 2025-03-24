@@ -1,5 +1,6 @@
 package Niggle.Nandu.Fund.Transfer.Service.FundTransfer;
 
+import Niggle.Nandu.Fund.Transfer.Service.Service.FundTransferService;
 import com.NiggleNandu.FinTech.Banking.System.Secure.Banking.App.AccountManagement.IServiceAccount;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/funds")
 public class FundTransferController {
     @Autowired
-    private IServiceAccount serviceAccount;
+    private FundTransferService fundTransferService;
 
-    @PostMapping("/transfer")
+ -   @PostMapping("/transfer")
     public ResponseEntity<String> transferFunds(@RequestBody @Valid FundTransferRequest request){
-        return serviceAccount.transferFunds(request)
+        return fundTransferService.transferFunds(request)
                 .map(message -> new ResponseEntity<>(message, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>("Transfer failed", HttpStatus.BAD_REQUEST));
     }
