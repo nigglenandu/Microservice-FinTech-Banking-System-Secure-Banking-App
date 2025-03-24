@@ -2,7 +2,7 @@ package Niggle.Nandu.Account.Management.Service.AccountManagement;
 
 import java.math.BigDecimal;
 
-public class FundTransferRequest {
+public class FundTransferRequestDto {
     private String fromAccountNumber;
     private String toAccountId;
     private BigDecimal amount;
