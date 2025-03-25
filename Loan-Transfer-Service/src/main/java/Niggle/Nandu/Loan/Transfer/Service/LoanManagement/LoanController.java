@@ -1,7 +1,6 @@
 package Niggle.Nandu.Loan.Transfer.Service.LoanManagement;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -11,11 +10,9 @@ import java.util.List;
 @RequestMapping("/loans")
 public class LoanController {
     private final IServiceLoan serviceLoan;
-    private final HttpSecurity httpSecurity;
 
-    public LoanController(IServiceLoan serviceLoan, HttpSecurity httpSecurity) {
+    public LoanController(IServiceLoan serviceLoan) {
         this.serviceLoan = serviceLoan;
-        this.httpSecurity = httpSecurity;
     }
 
     @PostMapping("/apply")

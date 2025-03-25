@@ -35,6 +35,11 @@ public class AccountServiceImpl implements IServiceAccount {
     }
 
     @Override
+    public Optional<Account> getAccountByNumber(String accountNumber) {
+        return accountRepository.findByAccountNumber(accountNumber);
+    }
+
+    @Override
     public Optional<Account> updateAccountById(Long id, Account updatedAccount) {
         return accountRepository.findById(id).
                 map(account -> {
@@ -56,7 +61,7 @@ public class AccountServiceImpl implements IServiceAccount {
     }
 
     @Override
-    public Optional<String> transferFunds(FundTransferRequest request) {
+    public Optional<String> transferFunds(FundTransferRequestDto request) {
         return accountRepository.findByAccountNumber(String.valueOf(request.getFromAccountNumber()))
                 .filter(sender -> request.getAmount().compareTo(BigDecimal.ZERO)> 0)
                 .filter(sender -> sender.getBalance().compareTo(request.getAmount())>=0)
@@ -73,7 +78,8 @@ public class AccountServiceImpl implements IServiceAccount {
                 .orElse(Optional.of("Failed: Transfer could not be completed"));
     }
 
-    private String processInternalTransfer(FundTransferRequest request){
+
+    private String processInternalTransfer(FundTransferRequestDto request){
         return accountRepository.findByAccountNumber(String.valueOf(request.getFromAccountNumber()))
                 .map(receiver -> {
                     receiver.setBalance(receiver.getBalance().add(request.getAmount()));
@@ -82,7 +88,7 @@ public class AccountServiceImpl implements IServiceAccount {
                 }).orElse("failed: Receiver account not found");
     }
 
-    private Optional<String> processExternalTransfer(FundTransferRequest request){
+    private Optional<String> processExternalTransfer(FundTransferRequestDto request){
        String externalAPiUrl ="https://api.externalbank.com/transfer";
         try {
             ExternalTransferRequest externalRequest = new ExternalTransferRequest(

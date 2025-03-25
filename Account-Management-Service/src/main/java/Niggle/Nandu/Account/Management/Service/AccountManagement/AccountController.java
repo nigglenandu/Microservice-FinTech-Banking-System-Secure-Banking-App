@@ -34,6 +34,13 @@ public class AccountController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("by-number/{accountNumber}")
+    public ResponseEntity<Account> getAccountByNumber(@PathVariable String accountNumber){
+        return serviceAccount.getAccountByNumber(accountNumber)
+                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Account> updateAccount(@PathVariable Long id, @Valid @RequestBody Account account) {
         return serviceAccount.updateAccountById(id, account)
