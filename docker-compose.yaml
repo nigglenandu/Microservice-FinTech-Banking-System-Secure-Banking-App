@@ -1,0 +1,117 @@
+version: "3.8"
+
+services:
+  Account-Management-Service:
+    image: account-management-service:latest
+    container_name: account-management
+    build: ./Account-Management-Service  # Fixed build path
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_NAME: Account-Management-Service
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/accountManagementService?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_JPA_OPEN_IN_VIEW: "false"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+    depends_on:
+      - db
+      - service-reg
+
+  db:
+    image: mysql:latest
+    container_name: fintech_mysql_db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: accountManagementService
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 18@13sql
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  Fund-Transfer-Service:
+    image: fund-transfer-service:latest
+    container_name: fund-transfer
+    build: ./Fund-Transfer-Service  # Fixed build path
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_APPLICATION_NAME: Fund-Transfer-Service
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/fundTransferService?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_JPA_OPEN_IN_VIEW: "false"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+    depends_on:
+      - db
+      - service-reg
+
+  Loan-Transfer-Service:
+    image: loan-transfer-service:latest
+    container_name: loan-transfer
+    build: ./Loan-Transfer-Service  # Fixed build path
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_APPLICATION_NAME: Loan-Transfer-Service
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/loanTransferService?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_JPA_OPEN_IN_VIEW: "false"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+    depends_on:
+      - db
+      - service-reg
+
+  Transaction-History-Service:
+    image: transaction-history-service:latest
+    container_name: transaction-history
+    build: ./Transaction-History-Service  # Fixed build path
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_APPLICATION_NAME: Transaction-History
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/transactionhistory?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+      SPRING_JPA_OPEN_IN_VIEW: "false"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+    depends_on:
+      - db
+      - service-reg
+
+  service-reg:
+    image: service-reg:latest
+    container_name: service-registry
+    build: ./service-reg  # Fixed build path
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_APPLICATION_NAME: service-reg
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      EUREKA_CLIENT_FETCH_REGISTRY: "false"
+
+volumes:
+  mysql_data:
