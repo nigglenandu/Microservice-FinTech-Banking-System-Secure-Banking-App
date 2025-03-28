@@ -1,4 +1,4 @@
-version: "3.8"
+
 
 services:
   Account-Management-Service:
@@ -22,12 +22,13 @@ services:
     depends_on:
       - db
       - service-reg
+      - zipkin
 
   db:
     image: mysql:latest
     container_name: fintech_mysql_db
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: accountManagementService
@@ -57,6 +58,7 @@ services:
     depends_on:
       - db
       - service-reg
+      - zipkin
 
   Loan-Transfer-Service:
     image: loan-transfer-service:latest
@@ -79,6 +81,7 @@ services:
     depends_on:
       - db
       - service-reg
+      - zipkin
 
   Transaction-History-Service:
     image: transaction-history-service:latest
@@ -101,6 +104,13 @@ services:
     depends_on:
       - db
       - service-reg
+      - zipkin
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin
+    ports:
+      - "9411:9411"
 
   service-reg:
     image: service-reg:latest

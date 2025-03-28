@@ -10,11 +10,11 @@
         <module name="service-reg" />
         <module name="Jwt-Security" />
         <module name="Fund-Transfer-Service" />
-        <module name="Transaction-History" />
         <module name="Account-Management-Service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Transaction-History" target="17" />
       <module name="Transaction-History (1)" target="17" />
     </bytecodeTargetLevel>
   </component>

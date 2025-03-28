@@ -5,7 +5,6 @@
     <file url="file://$PROJECT_DIR$/Fund-Transfer-Service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Jwt-Security/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Loan-Transfer-Service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/Transaction-History/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/service-reg/src/main/java" charset="UTF-8" />
   </component>
 </project>
