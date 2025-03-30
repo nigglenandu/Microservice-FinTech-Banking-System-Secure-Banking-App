@@ -1,127 +1,323 @@
+#
+#
+#services:
+#  Account-Management-Service:
+#    image: account-management-service:latest
+#    container_name: account-management
+#    build: ./Account-Management-Service  # Fixed build path
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_APPLICATION_NAME: Account-Management-Service
+#      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/accountManagementService?useSSL=false&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: 18@13sql
+#      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+#      SPRING_JPA_OPEN_IN_VIEW: "false"
+#      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
+#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+#      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+#    depends_on:
+#      - db
+#      - service-reg
+#      - zipkin
+#
+#  db:
+#    image: mysql:latest
+#    container_name: fintech_mysql_db
+#    ports:
+#      - "3307:3306"
+#    environment:
+#      MYSQL_ROOT_PASSWORD: rootpassword
+#      MYSQL_DATABASE: accountManagementService
+#      MYSQL_USER: root
+#      MYSQL_PASSWORD: 18@13sql
+#    volumes:
+#      - mysql_data:/var/lib/mysql
+#
+#  Fund-Transfer-Service:
+#    image: fund-transfer-service:latest
+#    container_name: fund-transfer
+#    build: ./Fund-Transfer-Service  # Fixed build path
+#    ports:
+#      - "8081:8081"
+#    environment:
+#      SPRING_APPLICATION_NAME: Fund-Transfer-Service
+#      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/fundTransferService?useSSL=false&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: 18@13sql
+#      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+#      SPRING_JPA_OPEN_IN_VIEW: "false"
+#      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
+#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+#      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+#    depends_on:
+#      - db
+#      - service-reg
+#      - zipkin
+#
+#  Loan-Transfer-Service:
+#    image: loan-transfer-service:latest
+#    container_name: loan-transfer
+#    build: ./Loan-Transfer-Service  # Fixed build path
+#    ports:
+#      - "8083:8083"
+#    environment:
+#      SPRING_APPLICATION_NAME: Loan-Transfer-Service
+#      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/loanTransferService?useSSL=false&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: 18@13sql
+#      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+#      SPRING_JPA_OPEN_IN_VIEW: "false"
+#      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
+#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+#      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+#    depends_on:
+#      - db
+#      - service-reg
+#      - zipkin
+#
+#  Transaction-History-Service:
+#    image: transaction-history-service:latest
+#    container_name: transaction-history
+#    build: ./Transaction-History-Service  # Fixed build path
+#    ports:
+#      - "8084:8084"
+#    environment:
+#      SPRING_APPLICATION_NAME: Transaction-History
+#      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/transactionhistory?useSSL=false&allowPublicKeyRetrieval=true
+#      SPRING_DATASOURCE_USERNAME: root
+#      SPRING_DATASOURCE_PASSWORD: 18@13sql
+#      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+#      SPRING_JPA_OPEN_IN_VIEW: "false"
+#      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+#      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
+#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+#      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+#    depends_on:
+#      - db
+#      - service-reg
+#      - zipkin
+#
+#  zipkin:
+#    image: openzipkin/zipkin:latest
+#    container_name: zipkin
+#    ports:
+#      - "9411:9411"
+#
+#  service-reg:
+#    image: service-reg:latest
+#    container_name: service-reg
+#    build: ./service-reg  # Fixed build path
+#    ports:
+#      - "8761:8761"
+#    environment:
+#      SPRING_APPLICATION_NAME: service-reg
+#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+#      EUREKA_CLIENT_FETCH_REGISTRY: "false"
+#
+#volumes:
+#  mysql_data:
 
-
+name: microservice-fintech-banking-system-secure-banking-app
 services:
   Account-Management-Service:
-    image: account-management-service:latest
+    build:
+      context: C:\Users\Nitro\IdeaProjects\Springboot\sb_projects\Microservice-FinTech-Banking-System-Secure-Banking-App\Account-Management-Service
+      dockerfile: Dockerfile
     container_name: account-management
-    build: ./Account-Management-Service  # Fixed build path
-    ports:
-      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+      service-reg:
+        condition: service_started
+        required: true
+      zipkin:
+        condition: service_started
+        required: true
     environment:
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
       SPRING_APPLICATION_NAME: Account-Management-Service
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/accountManagementService?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 18@13sql
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
       SPRING_JPA_OPEN_IN_VIEW: "false"
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
-      EUREKA_CLIENT_FETCH_REGISTRY: "true"
-    depends_on:
-      - db
-      - service-reg
-      - zipkin
-
-  db:
-    image: mysql:latest
-    container_name: fintech_mysql_db
+    image: account-management-service:latest
+    networks:
+      default: null
     ports:
-      - "3307:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: accountManagementService
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 18@13sql
-    volumes:
-      - mysql_data:/var/lib/mysql
-
+      - mode: ingress
+        target: 8080
+        published: "8080"
+        protocol: tcp
   Fund-Transfer-Service:
-    image: fund-transfer-service:latest
+    build:
+      context: C:\Users\Nitro\IdeaProjects\Springboot\sb_projects\Microservice-FinTech-Banking-System-Secure-Banking-App\Fund-Transfer-Service
+      dockerfile: Dockerfile
     container_name: fund-transfer
-    build: ./Fund-Transfer-Service  # Fixed build path
-    ports:
-      - "8081:8081"
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+      service-reg:
+        condition: service_started
+        required: true
+      zipkin:
+        condition: service_started
+        required: true
     environment:
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
       SPRING_APPLICATION_NAME: Fund-Transfer-Service
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/fundTransferService?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 18@13sql
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
       SPRING_JPA_OPEN_IN_VIEW: "false"
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
-      EUREKA_CLIENT_FETCH_REGISTRY: "true"
-    depends_on:
-      - db
-      - service-reg
-      - zipkin
-
-  Loan-Transfer-Service:
-    image: loan-transfer-service:latest
-    container_name: loan-transfer
-    build: ./Loan-Transfer-Service  # Fixed build path
+    image: fund-transfer-service:latest
+    networks:
+      default: null
     ports:
-      - "8083:8083"
+      - mode: ingress
+        target: 8081
+        published: "8081"
+        protocol: tcp
+  Loan-Transfer-Service:
+    build:
+      context: C:\Users\Nitro\IdeaProjects\Springboot\sb_projects\Microservice-FinTech-Banking-System-Secure-Banking-App\Loan-Transfer-Service
+      dockerfile: Dockerfile
+    container_name: loan-transfer
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+      service-reg:
+        condition: service_started
+        required: true
+      zipkin:
+        condition: service_started
+        required: true
     environment:
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
       SPRING_APPLICATION_NAME: Loan-Transfer-Service
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/loanTransferService?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 18@13sql
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
       SPRING_JPA_OPEN_IN_VIEW: "false"
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
-      EUREKA_CLIENT_FETCH_REGISTRY: "true"
-    depends_on:
-      - db
-      - service-reg
-      - zipkin
-
-  Transaction-History-Service:
-    image: transaction-history-service:latest
-    container_name: transaction-history
-    build: ./Transaction-History-Service  # Fixed build path
+    image: loan-transfer-service:latest
+    networks:
+      default: null
     ports:
-      - "8084:8084"
+      - mode: ingress
+        target: 8083
+        published: "8083"
+        protocol: tcp
+  Transaction-History-Service:
+    build:
+      context: C:\Users\Nitro\IdeaProjects\Springboot\sb_projects\Microservice-FinTech-Banking-System-Secure-Banking-App\Transaction-History-Service
+      dockerfile: Dockerfile
+    container_name: transaction-history
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+      service-reg:
+        condition: service_started
+        required: true
+      zipkin:
+        condition: service_started
+        required: true
     environment:
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
       SPRING_APPLICATION_NAME: Transaction-History
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/transactionhistory?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 18@13sql
-      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
       SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
       SPRING_JPA_OPEN_IN_VIEW: "false"
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://service-reg:8761/eureka
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
-      EUREKA_CLIENT_FETCH_REGISTRY: "true"
-    depends_on:
-      - db
-      - service-reg
-      - zipkin
-
-  zipkin:
-    image: openzipkin/zipkin:latest
-    container_name: zipkin
+    image: transaction-history-service:latest
+    networks:
+      default: null
     ports:
-      - "9411:9411"
-
-  service-reg:
-    image: service-reg:latest
-    container_name: service-reg
-    build: ./service-reg  # Fixed build path
-    ports:
-      - "8761:8761"
+      - mode: ingress
+        target: 8084
+        published: "8084"
+        protocol: tcp
+  db:
+    container_name: fintech_mysql_db
     environment:
-      SPRING_APPLICATION_NAME: service-reg
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      MYSQL_DATABASE: accountManagementService
+      MYSQL_PASSWORD: 18@13sql
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: root
+    image: mysql:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 3306
+        published: "3307"
+        protocol: tcp
+    volumes:
+      - type: volume
+        source: mysql_data
+        target: /var/lib/mysql
+        volume: {}
+  service-reg:
+    build:
+      context: C:\Users\Nitro\IdeaProjects\Springboot\sb_projects\Microservice-FinTech-Banking-System-Secure-Banking-App\service-reg
+      dockerfile: Dockerfile
+    container_name: service-reg
+    environment:
       EUREKA_CLIENT_FETCH_REGISTRY: "false"
-
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "false"
+      SPRING_APPLICATION_NAME: service-reg
+    image: service-reg:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 8761
+        published: "8761"
+        protocol: tcp
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin:latest
+    networks:
+      default: null
+    ports:
+      - mode: ingress
+        target: 9411
+        published: "9411"
+        protocol: tcp
+networks:
+  default:
+    name: microservice-fintech-banking-system-secure-banking-app_default
 volumes:
   mysql_data:
+    name: microservice-fintech-banking-system-secure-banking-app_mysql_data

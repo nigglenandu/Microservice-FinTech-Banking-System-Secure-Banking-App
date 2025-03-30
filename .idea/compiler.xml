@@ -12,6 +12,7 @@
         <module name="Loan-Transfer-Service" />
         <module name="Fund-Transfer-Service" />
         <module name="Transaction-History" />
+        <module name="gateway" />
         <module name="Account-Management-Service" />
       </profile>
     </annotationProcessing>
@@ -28,6 +29,7 @@
       <module name="Transaction-History" options="-parameters" />
       <module name="Transaction-History (1)" options="-parameters" />
       <module name="configServer" options="-parameters" />
+      <module name="gateway" options="-parameters" />
       <module name="service-reg" options="-parameters" />
     </option>
   </component>
