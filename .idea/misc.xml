@@ -11,6 +11,8 @@
         <option value="$PROJECT_DIR$/Account-Management-Service/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/service-reg/pom.xml" />
+        <option value="$PROJECT_DIR$/Transaction-History-Service/pom.xml" />
+        <option value="$PROJECT_DIR$/configServer/pom.xml" />
       </list>
     </option>
   </component>

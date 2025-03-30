@@ -114,7 +114,7 @@ services:
 
   service-reg:
     image: service-reg:latest
-    container_name: service-registry
+    container_name: service-reg
     build: ./service-reg  # Fixed build path
     ports:
       - "8761:8761"
