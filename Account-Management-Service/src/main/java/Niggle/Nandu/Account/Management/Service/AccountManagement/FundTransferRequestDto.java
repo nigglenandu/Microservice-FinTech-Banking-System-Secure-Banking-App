@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class FundTransferRequestDto {
     private String fromAccountNumber;
-    private String toAccountId;
+    private String toAccountNumber;
     private BigDecimal amount;
     private boolean isExternalTransfer;
 
@@ -32,11 +32,11 @@ public class FundTransferRequestDto {
         isExternalTransfer = externalTransfer;
     }
 
-    public String getToAccountId() {
-        return toAccountId;
+    public String getToAccountNumber() {
+        return toAccountNumber;
     }
 
-    public void setToAccountId(String toAccountId) {
-        this.toAccountId = toAccountId;
+    public void setToAccountNumber(String toAccountNumber) {
+        this.toAccountNumber = toAccountNumber;
     }
 }

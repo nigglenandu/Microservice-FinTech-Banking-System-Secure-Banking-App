@@ -80,7 +80,7 @@ public class AccountServiceImpl implements IServiceAccount {
 
 
     private String processInternalTransfer(FundTransferRequestDto request){
-        return accountRepository.findByAccountNumber(String.valueOf(request.getFromAccountNumber()))
+        return accountRepository.findByAccountNumber(String.valueOf(request.getToAccountNumber()))
                 .map(receiver -> {
                     receiver.setBalance(receiver.getBalance().add(request.getAmount()));
                     accountRepository.save(receiver);
@@ -94,7 +94,7 @@ public class AccountServiceImpl implements IServiceAccount {
             ExternalTransferRequest externalRequest = new ExternalTransferRequest(
             request.getAmount(),
                     Long.parseLong(request.getFromAccountNumber()),
-                    Long.parseLong(request.getToAccountId())
+                    Long.parseLong(request.getToAccountNumber())
             );
 
             HttpEntity<ExternalTransferRequest> httpEntity = new HttpEntity<>(externalRequest);

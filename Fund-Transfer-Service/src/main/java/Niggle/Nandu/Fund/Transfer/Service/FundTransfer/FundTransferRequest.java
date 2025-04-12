@@ -4,15 +4,15 @@ import java.math.BigDecimal;
 
 public class FundTransferRequest {
     private String fromAccountNumber;
-    private String toAccountId;
+    private String toAccountNumber;
     private BigDecimal amount;
     private boolean isExternalTransfer;
 
-    public FundTransferRequest(BigDecimal amount, String fromAccountNumber, boolean isExternalTransfer, String toAccountId) {
+    public FundTransferRequest(BigDecimal amount, String fromAccountNumber, boolean isExternalTransfer, String toAccountNumber) {
         this.amount = amount;
         this.fromAccountNumber = fromAccountNumber;
         this.isExternalTransfer = isExternalTransfer;
-        this.toAccountId = toAccountId;
+        this.toAccountNumber = toAccountNumber;
     }
 
     public BigDecimal getAmount() {
@@ -39,11 +39,11 @@ public class FundTransferRequest {
         isExternalTransfer = externalTransfer;
     }
 
-    public String getToAccountId() {
-        return toAccountId;
+    public String getToAccountNumber() {
+        return toAccountNumber;
     }
 
-    public void setToAccountId(String toAccountId) {
-        this.toAccountId = toAccountId;
+    public void setToAccountNumber(String toAccountNumber) {
+        this.toAccountNumber = toAccountNumber;
     }
 }

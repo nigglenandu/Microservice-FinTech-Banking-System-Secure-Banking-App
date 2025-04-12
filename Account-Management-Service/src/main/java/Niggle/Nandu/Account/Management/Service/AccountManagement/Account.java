@@ -17,7 +17,7 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
-    public Account(String accountNumber, BigDecimal balance, long id, AccountStatus status) {
+    public Account( String accountNumber, BigDecimal balance, long id, AccountStatus status) {
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.id = id;

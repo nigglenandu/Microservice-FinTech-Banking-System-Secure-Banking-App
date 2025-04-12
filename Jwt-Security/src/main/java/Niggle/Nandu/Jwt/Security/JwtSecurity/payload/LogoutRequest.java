@@ -7,3 +7,5 @@ public class LogoutRequest {
     @NotNull(message = "Token is required")
     private String token;
 }
+
+
