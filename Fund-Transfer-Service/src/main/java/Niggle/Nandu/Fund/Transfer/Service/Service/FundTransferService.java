@@ -19,7 +19,7 @@ public class FundTransferService {
 
     public Optional<String> transferFunds(FundTransferRequest request){
         AccountDto sender = accountClient.getAccountByNumber(request.getFromAccountNumber());
-        AccountDto receiver = accountClient.getAccountById(request.getToAccountId());
+        AccountDto receiver = accountClient.getAccountByNumber(request.getToAccountNumber());
 
         if(sender.getStatus() != AccountStatus.ACTIVE){
             return Optional.of("Transfer failed: Sender account is not active");

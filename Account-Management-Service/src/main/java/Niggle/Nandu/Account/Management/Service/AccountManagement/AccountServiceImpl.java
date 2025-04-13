@@ -62,20 +62,21 @@ public class AccountServiceImpl implements IServiceAccount {
 
     @Override
     public Optional<String> transferFunds(FundTransferRequestDto request) {
-        return accountRepository.findByAccountNumber(String.valueOf(request.getFromAccountNumber()))
-                .filter(sender -> request.getAmount().compareTo(BigDecimal.ZERO)> 0)
-                .filter(sender -> sender.getBalance().compareTo(request.getAmount())>=0)
+        return accountRepository.findByAccountNumber(request.getFromAccountNumber())
+                .filter(sender -> request.getAmount().compareTo(BigDecimal.ZERO) > 0)
+                .filter(sender -> sender.getBalance().compareTo(request.getAmount()) >= 0)
                 .map(sender -> {
                     sender.setBalance(sender.getBalance().subtract(request.getAmount()));
                     accountRepository.save(sender);
 
-                    if(!request.isExternalTransfer()){
-                        return Optional.of(processInternalTransfer(request));
+                    String result;
+                    if (!request.isExternalTransfer()) {
+                        result = processInternalTransfer(request);
                     } else {
-                        return processExternalTransfer(request);
+                        result = processExternalTransfer(request).orElse("External transfer failed");
                     }
-                })
-                .orElse(Optional.of("Failed: Transfer could not be completed"));
+                    return result;
+                });
     }
 
 
@@ -89,13 +90,18 @@ public class AccountServiceImpl implements IServiceAccount {
     }
 
     private Optional<String> processExternalTransfer(FundTransferRequestDto request){
-       String externalAPiUrl ="https://api.externalbank.com/transfer";
+        String externalAPiUrl = "http://localhost:8081/api/funds/receive";
         try {
             ExternalTransferRequest externalRequest = new ExternalTransferRequest(
             request.getAmount(),
                     Long.parseLong(request.getFromAccountNumber()),
                     Long.parseLong(request.getToAccountNumber())
             );
+
+            System.out.println("Sending external transfer request:");
+            System.out.println("From: " + externalRequest.getFromAccountNumber());
+            System.out.println("To: " + externalRequest.getToAccountNumber());
+            System.out.println("Amount: " + externalRequest.getAmount());
 
             HttpEntity<ExternalTransferRequest> httpEntity = new HttpEntity<>(externalRequest);
             ResponseEntity<ExternalTransferResponse> response = restTemplate.postForEntity(externalAPiUrl, httpEntity, ExternalTransferResponse.class);

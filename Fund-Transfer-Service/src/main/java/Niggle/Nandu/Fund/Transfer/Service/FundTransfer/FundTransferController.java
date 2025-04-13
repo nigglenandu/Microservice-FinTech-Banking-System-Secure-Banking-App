@@ -18,8 +18,13 @@ public class FundTransferController {
 
     @PostMapping("/transfer")
     public ResponseEntity<String> transferFunds(@RequestBody @Valid FundTransferRequest request){
-        return fundTransferService.transferFunds(request)
-                .map(message -> new ResponseEntity<>(message, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>("Transfer failed", HttpStatus.BAD_REQUEST));
+        try {
+            return fundTransferService.transferFunds(request)
+                    .map(message -> new ResponseEntity<>(message, HttpStatus.OK))
+                    .orElseGet(() -> new ResponseEntity<>("Transfer failed", HttpStatus.BAD_REQUEST));
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Internal Server Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
