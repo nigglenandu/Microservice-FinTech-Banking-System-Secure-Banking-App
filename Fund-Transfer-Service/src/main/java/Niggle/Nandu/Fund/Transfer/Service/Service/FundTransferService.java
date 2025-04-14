@@ -27,7 +27,6 @@ public class FundTransferService {
         if(receiver.getStatus() != AccountStatus.ACTIVE){
             return Optional.of("Transfer failed: Receiver account is not active");
         }
-
-        return Optional.of("Transfer successful!");
+        return accountClient.triggerFundTransfer(request);
     }
 }

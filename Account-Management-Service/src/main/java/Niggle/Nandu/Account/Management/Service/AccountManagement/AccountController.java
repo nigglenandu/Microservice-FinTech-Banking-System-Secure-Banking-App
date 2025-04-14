@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -46,6 +47,11 @@ public class AccountController {
         return serviceAccount.updateAccountById(id, account)
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("/funds/transfer")
+    public Optional<String> triggerFundTransfer(@RequestBody FundTransferRequestDto request) {
+        return serviceAccount.transferFunds(request);
     }
 
     @DeleteMapping("/{id}")

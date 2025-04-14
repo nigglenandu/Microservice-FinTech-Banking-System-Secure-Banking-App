@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
-public class AccountDto {
+public class  AccountDto {
     private long id;
 
     @Column(name = "account_number")
