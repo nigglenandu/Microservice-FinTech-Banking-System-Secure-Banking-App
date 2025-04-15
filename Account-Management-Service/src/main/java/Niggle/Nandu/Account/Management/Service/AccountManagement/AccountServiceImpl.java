@@ -66,14 +66,19 @@ public class AccountServiceImpl implements IServiceAccount {
                 .filter(sender -> request.getAmount().compareTo(BigDecimal.ZERO) > 0)
                 .filter(sender -> sender.getBalance().compareTo(request.getAmount()) >= 0)
                 .flatMap(sender -> {
-                    sender.setBalance(sender.getBalance().subtract(request.getAmount()));
-                    accountRepository.save(sender);
-
                     if (!request.isExternalTransfer()) {
-
+                        sender.setBalance(sender.getBalance().subtract(request.getAmount()));
+                        accountRepository.save(sender);
                         return Optional.of(processInternalTransfer(request));
                     } else {
-                        return processExternalTransfer(request);
+                        Optional<String> externalResponse = processExternalTransfer(request);
+                        if(externalResponse.isPresent() && externalResponse.get().toLowerCase().contains("success")) {
+                            sender.setBalance(sender.getBalance().subtract(request.getAmount()));
+                            accountRepository.save(sender);
+                            return Optional.of("Transfer successful: External");
+                        } else {
+                            return Optional.of("Failed: External transfer error");
+                        }
                     }
                 });
     }
@@ -96,19 +101,19 @@ public class AccountServiceImpl implements IServiceAccount {
                     Long.parseLong(request.getToAccountNumber())
             );
 
-            RestTemplate restTemplate = new RestTemplate();
+//          RestTemplate restTemplate = new RestTemplate();
             HttpEntity<ExternalTransferRequest> httpEntity = new HttpEntity<>(externalRequest);
             //ResponseEntity<ExternalTransferResponse> response = restTemplate.postForEntity(externalAPiUrl, httpEntity, ExternalTransferResponse.class);
             ResponseEntity<String> response = restTemplate.postForEntity(externalAPiUrl, httpEntity, String.class);
 
             if(response.getStatusCode().is2xxSuccessful() && response.getBody() != null && response.getBody().toLowerCase().contains("success")){
-                return Optional.of("Transfer successful: External");
+                return Optional.of("success");
             } else {
-                return Optional.of("Failed: External transfer error");
+                return Optional.of("Failed");
             }
         } catch (Exception e){
             e.printStackTrace();
-            return Optional.of("Failed: Unable to process external transfer");
+            return Optional.of("Failed");
         }
     }
 }
