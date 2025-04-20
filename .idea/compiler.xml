@@ -6,12 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Transaction-History-Service" />
         <module name="service-reg" />
         <module name="Jwt-Security" />
         <module name="configServer" />
         <module name="Loan-Transfer-Service" />
         <module name="Fund-Transfer-Service" />
-        <module name="Transaction-History" />
         <module name="gateway" />
         <module name="Account-Management-Service" />
       </profile>
@@ -26,8 +26,8 @@
       <module name="Fund-Transfer-Service" options="-parameters" />
       <module name="Jwt-Security" options="-parameters" />
       <module name="Loan-Transfer-Service" options="-parameters" />
-      <module name="Transaction-History" options="-parameters" />
       <module name="Transaction-History (1)" options="-parameters" />
+      <module name="Transaction-History-Service" options="-parameters" />
       <module name="configServer" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="service-reg" options="-parameters" />
