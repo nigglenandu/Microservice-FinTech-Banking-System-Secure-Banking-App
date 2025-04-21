@@ -1,4 +1,5 @@
 
+version: '3.8'
 
 services:
   service-registry:
@@ -7,8 +8,10 @@ services:
     ports:
       - "8761:8761"
     restart: always
+    depends_on:
+      - mysql
     networks:
-      - fintech-net
+      - fintech
 
   account-service:
     image: nigglenandu/account-management-service
@@ -18,8 +21,9 @@ services:
     restart: always
     depends_on:
       - service-registry
+      - mysql
     networks:
-      - fintech-net
+      - fintech
     environment:
       SPRING_APPLICATION_NAME: Account-Management-Service
       SERVER_PORT: 8080
@@ -31,7 +35,6 @@ services:
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
 
-
   fund-service:
     image: nigglenandu/fund-transfer-service
     container_name: fund-transfer-service
@@ -40,40 +43,61 @@ services:
     restart: always
     depends_on:
       - service-registry
+      - mysql
     networks:
-      - fintech-net
+      - fintech
     environment:
       SPRING_APPLICATION_NAME: Fund-Transfer-Service
-      ACCOUNT_MANAGEMENT_SERVICE_URL: http://account-management-service:8080
       SERVER_PORT: 8081
+      ACCOUNT_MANAGEMENT_SERVICE_URL: http://account-management-service:8080
+      SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fundtransferservice
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 18@13sql
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: true
-      EUREKA_CLIENT_FETCH_REGISTRY: true
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
 
-  transaction-history:
-    image: nigglenandu/transaction-history
-    container_name: transaction-history
+  transaction-service:
+    image: nigglenandu/transaction-history-service
+    container_name: transaction-history-service
     ports:
       - "8084:8084"
     restart: always
     depends_on:
       - service-registry
+      - mysql
     networks:
-      - fintech-net
+      - fintech
     environment:
       SPRING_APPLICATION_NAME: Transaction-History-Service
-      ACCOUNT_MANAGEMENT_SERVICE_URL: http://account-management-service:8080
       SERVER_PORT: 8084
+      ACCOUNT_MANAGEMENT_SERVICE_URL: http://account-management-service:8080
+      SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/transactionhistory
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 18@13sql
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: true
-      EUREKA_CLIENT_FETCH_REGISTRY: true
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 18@13sql
+      MYSQL_DATABASE: transactionhistory
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - fintech
+
+volumes:
+  mysql_data:
 
 networks:
-  fintech-net:
+  fintech:
     driver: bridge
