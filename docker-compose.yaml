@@ -45,6 +45,7 @@ services:
     depends_on:
       - service-registry
       - mysql
+      - zipkin
     networks:
       - fintech
     environment:
@@ -68,6 +69,7 @@ services:
     depends_on:
       - service-registry
       - mysql
+      - zipkin
     networks:
       - fintech
     environment:
@@ -90,6 +92,7 @@ services:
     depends_on:
       - service-registry
       - mysql
+      - zipkin
     networks:
       - fintech
     environment:
