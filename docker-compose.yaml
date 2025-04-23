@@ -32,6 +32,7 @@ services:
     depends_on:
       - service-registry
       - mysql
+      - zipkin
     networks:
       - fintech
 
@@ -62,28 +63,6 @@ services:
     image: nigglenandu/transaction-history-service
     container_name: transaction-history-service
     ports:
-      - "8083:8083"
-    restart: always
-    depends_on:
-      - service-registry
-      - mysql
-    networks:
-      - fintech
-    environment:
-      SPRING_APPLICATION_NAME: Transaction-History-Service
-      SERVER_PORT: 8083
-      SPRING_PROFILES_ACTIVE: docker
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/loantransferservice
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 18@13sql
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
-      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
-      EUREKA_CLIENT_FETCH_REGISTRY: "true"
-
-  loan-service:
-    image: nigglenandu/loan-transfer-service
-    container_name: loan-service
-    ports:
       - "8084:8084"
     restart: always
     depends_on:
@@ -94,7 +73,6 @@ services:
     environment:
       SPRING_APPLICATION_NAME: Transaction-History-Service
       SERVER_PORT: 8084
-      ACCOUNT_MANAGEMENT_SERVICE_URL: http://account-management-service:8080
       SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/transactionhistory
       SPRING_DATASOURCE_USERNAME: root
@@ -102,6 +80,36 @@ services:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
+
+  loan-service:
+    image: nigglenandu/loan-transfer-service
+    container_name: loan-service
+    ports:
+      - "8083:8083"
+    restart: always
+    depends_on:
+      - service-registry
+      - mysql
+    networks:
+      - fintech
+    environment:
+      SPRING_APPLICATION_NAME: Loan-Transfer-Service
+      SERVER_PORT: 8083
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/loantransferservice
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - 9411:9411
+    networks:
+      - fintech
 
   mysql:
     image: mysql:8
