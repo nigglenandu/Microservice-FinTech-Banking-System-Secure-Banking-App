@@ -1,5 +1,5 @@
 
-version: '3.8'
+#version: '3.8'
 
 services:
   service-registry:
@@ -27,6 +27,7 @@ services:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
     ports:
       - "8080:8080"
     depends_on:
@@ -59,6 +60,7 @@ services:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
   transaction-service:
     image: nigglenandu/transaction-history-service
@@ -82,6 +84,7 @@ services:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
   loan-service:
     image: nigglenandu/loan-transfer-service
@@ -105,6 +108,7 @@ services:
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
   zipkin:
     image: openzipkin/zipkin
