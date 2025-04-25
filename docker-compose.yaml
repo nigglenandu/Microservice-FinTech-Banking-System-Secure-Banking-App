@@ -8,8 +8,6 @@ services:
     ports:
       - "8761:8761"
     restart: always
-    depends_on:
-      - mysql
     networks:
       - fintech
 
@@ -20,7 +18,8 @@ services:
       - "8088:8088"
     restart: always
     environment:
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
     depends_on:
@@ -39,11 +38,11 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/accountmanagementservice
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 18@13sql
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
-      SPRING_CONFIG_IMPORT: optional:configserver:http://localhost:8088
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8088
     ports:
       - "8080:8080"
     depends_on:
@@ -74,7 +73,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/fundtransferservice
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 18@13sql
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
@@ -98,7 +97,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/transactionhistory
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 18@13sql
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
@@ -122,7 +121,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/loantransferservice
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 18@13sql
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-reg:8761/eureka/
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
