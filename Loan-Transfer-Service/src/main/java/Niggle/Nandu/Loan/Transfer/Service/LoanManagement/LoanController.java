@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/loans")
+@RequestMapping("/api/loans")
 public class LoanController {
     private final IServiceLoan serviceLoan;
 

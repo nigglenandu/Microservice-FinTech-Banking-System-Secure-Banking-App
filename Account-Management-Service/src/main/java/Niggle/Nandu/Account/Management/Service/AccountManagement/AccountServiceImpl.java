@@ -1,5 +1,7 @@
 package Niggle.Nandu.Account.Management.Service.AccountManagement;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ public class AccountServiceImpl implements IServiceAccount {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    private static final String ACCOUNT_SERVICE = "accountServiceBreaker";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -92,8 +96,10 @@ public class AccountServiceImpl implements IServiceAccount {
                 }).orElse("failed: Receiver account not found");
     }
 
-    private Optional<String> processExternalTransfer(FundTransferRequestDto request){
-        String externalAPiUrl ="http://localhost:8081/api/funds/transfer";
+    @CircuitBreaker(name = ACCOUNT_SERVICE, fallbackMethod = "externalTransferFallback")
+    @Retry(name = ACCOUNT_SERVICE)
+    private Optional<String> processExternalTransfer(FundTransferRequestDto request) {
+        String externalAPiUrl = "http://localhost:8081/api/funds/transfer";
         try {
             ExternalTransferRequest externalRequest = new ExternalTransferRequest(
                     request.getAmount(),
@@ -106,14 +112,18 @@ public class AccountServiceImpl implements IServiceAccount {
             //ResponseEntity<ExternalTransferResponse> response = restTemplate.postForEntity(externalAPiUrl, httpEntity, ExternalTransferResponse.class);
             ResponseEntity<String> response = restTemplate.postForEntity(externalAPiUrl, httpEntity, String.class);
 
-            if(response.getStatusCode().is2xxSuccessful() && response.getBody() != null && response.getBody().toLowerCase().contains("success")){
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null && response.getBody().toLowerCase().contains("success")) {
                 return Optional.of("success");
             } else {
                 return Optional.of("Failed");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return Optional.of("Failed");
         }
     }
+        private Optional<String> externalTransferFallback(FundTransferRequestDto request, Throwable throwable){
+            System.out.println("Fallback executed because: "+ throwable.getMessage());
+            return Optional.of("Failed: External service is down");
+        }
 }
