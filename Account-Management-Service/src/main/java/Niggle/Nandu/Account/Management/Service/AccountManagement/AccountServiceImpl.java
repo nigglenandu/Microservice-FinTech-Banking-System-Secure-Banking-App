@@ -1,5 +1,6 @@
 package Niggle.Nandu.Account.Management.Service.AccountManagement;
 
+import Niggle.Nandu.Account.Management.Service.messaging.FundTransferProducer;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements IServiceAccount {
+
+    @Autowired
+    private FundTransferProducer fundTransferProducer;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -73,12 +77,20 @@ public class AccountServiceImpl implements IServiceAccount {
                     if (!request.isExternalTransfer()) {
                         sender.setBalance(sender.getBalance().subtract(request.getAmount()));
                         accountRepository.save(sender);
+
+                        fundTransferProducer.sendTransferMessage("Funds transferred: From " + request.getFromAccountNumber() +
+                                " to " + request.getToAccountNumber() + ", Amount: " + request.getAmount());
+
                         return Optional.of(processInternalTransfer(request));
                     } else {
                         Optional<String> externalResponse = processExternalTransfer(request);
                         if(externalResponse.isPresent() && externalResponse.get().toLowerCase().contains("success")) {
                             sender.setBalance(sender.getBalance().subtract(request.getAmount()));
                             accountRepository.save(sender);
+
+                            fundTransferProducer.sendTransferMessage("Funds transferred: From " + request.getFromAccountNumber() +
+                                    " to " + request.getToAccountNumber() + ", Amount: " + request.getAmount());
+
                             return Optional.of("Transfer successful: External");
                         } else {
                             return Optional.of("Failed: External transfer error");
