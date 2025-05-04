@@ -119,6 +119,7 @@ services:
       - mysql
       - zipkin
       - configserver
+      - rabbitmq
     networks:
       - fintech
 
@@ -132,6 +133,7 @@ services:
       - service-registry
       - mysql
       - zipkin
+      - rabbitmq
     networks:
       - fintech
     environment:
