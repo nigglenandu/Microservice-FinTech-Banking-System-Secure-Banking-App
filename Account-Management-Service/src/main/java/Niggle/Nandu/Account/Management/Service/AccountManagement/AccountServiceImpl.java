@@ -3,6 +3,7 @@ package Niggle.Nandu.Account.Management.Service.AccountManagement;
 import Niggle.Nandu.Account.Management.Service.messaging.FundTransferProducer;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -68,6 +69,7 @@ public class AccountServiceImpl implements IServiceAccount {
         }
     }
 
+    @Transactional
     @Override
     public Optional<String> transferFunds(FundTransferRequestDto request) {
         return accountRepository.findByAccountNumber(request.getFromAccountNumber())
