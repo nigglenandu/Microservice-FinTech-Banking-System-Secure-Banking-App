@@ -3,11 +3,11 @@ package Niggle.Nandu.Account.Management.Service.AccountManagement;
 import java.math.BigDecimal;
 
 public class ExternalTransferRequest {
-    private Long fromAccountNumber;
+    private String fromAccountNumber;
     private BigDecimal amount;
-    private Long toAccountNumber;
+    private String toAccountNumber;
 
-    public ExternalTransferRequest(BigDecimal amount, Long fromAccountNumber, Long toAccountNumber) {
+    public ExternalTransferRequest(BigDecimal amount, String fromAccountNumber, String toAccountNumber) {
         this.amount = amount;
         this.fromAccountNumber = fromAccountNumber;
         this.toAccountNumber = toAccountNumber;
@@ -21,19 +21,19 @@ public class ExternalTransferRequest {
         this.amount = amount;
     }
 
-    public Long getFromAccountNumber() {
+    public String getFromAccountNumber() {
         return fromAccountNumber;
     }
 
-    public void setFromAccountNumber(Long fromAccountNumber) {
+    public void setFromAccountNumber(String fromAccountNumber) {
         this.fromAccountNumber = fromAccountNumber;
     }
 
-    public Long getToAccountNumber() {
+    public String getToAccountNumber() {
         return toAccountNumber;
     }
 
-    public void setToAccountNumber(Long toAccountNumber) {
+    public void setToAccountNumber(String toAccountNumber) {
         this.toAccountNumber = toAccountNumber;
     }
 }
