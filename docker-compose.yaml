@@ -201,7 +201,7 @@ services:
     image: nigglenandu/gateway
     container_name: gateway
     ports:
-      - "8085:8085"
+      - "8086:8086"
     restart: always
     depends_on:
       - service-registry
@@ -220,6 +220,7 @@ services:
       LOGGING_LEVEL_ROOT: info
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY_ROUTE_ROUTEDEFINITIONLOCATOR: INFO
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY: trace
+      SPRING_SECURITY_0AUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://localhost:8085/realms/fintech-oauth2/protocol/openid-connect/certs
     networks:
       - fintech
 
