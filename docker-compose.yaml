@@ -239,7 +239,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 18@13sql
     ports:
-       - "3307:3306"
+       - "3307:3306" 
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
