@@ -204,8 +204,14 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: mysql
+      KC_DB_URL: jdbc:mysql://mysql:3306/keycloak
+      KC_DB_USERNAME: root
+      KC_DB_PASSWORD: 18@13sql
     ports:
       - "8080:8080"
+    depends_on:
+      - mysql
     networks:
       - fintech
 
@@ -218,6 +224,7 @@ services:
     depends_on:
       - service-registry
       - account-service
+      - keycloak
     environment:
       SPRING_APPLICATION_NAME: gateway
       SERVER_PORT: 8086
@@ -227,14 +234,13 @@ services:
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
       MANAGEMENT_TRACING_SAMPLING_PROBABILITY: 1.0
       SPRING_CLOUD_GATEWAY_ROUTES_0_ID: Account-Management-Service-gateway
-      SPRING_CLOUD_GATEWAY_ROUTES_0_URI: http://Account-Management-Service:8087
+      SPRING_CLOUD_GATEWAY_ROUTES_0_URI: lb://Account-Management-Service
       SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: Path=/api/accounts/**
+      SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0: StripPrefix=1
       LOGGING_LEVEL_ROOT: info
-      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY_ROUTE_ROUTEDEFINITIONLOCATOR: INFO
-      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY: trace
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/fintech-oauth2
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY: DEBUG
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/fintech-oauth2/protocol/openid-connect/certs
-
     networks:
       - fintech
 
