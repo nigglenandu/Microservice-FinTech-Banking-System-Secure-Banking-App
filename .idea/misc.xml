@@ -4,7 +4,6 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/Jwt-Security/pom.xml" />
         <option value="$PROJECT_DIR$/Transaction-History/pom.xml" />
         <option value="$PROJECT_DIR$/Fund-Transfer-Service/pom.xml" />
         <option value="$PROJECT_DIR$/Loan-Transfer-Service/pom.xml" />

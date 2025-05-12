@@ -72,7 +72,7 @@ services:
     ports:
       - "8087:8087"
     depends_on:
-#      - service-registry
+      - service-registry
       - mysql
 #      - zipkin
 #      - configserver
@@ -236,14 +236,19 @@ services:
       SPRING_CLOUD_GATEWAY_ROUTES_0_ID: Account-Management-Service-gateway
       SPRING_CLOUD_GATEWAY_ROUTES_0_URI: lb://Account-Management-Service
       SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: Path=/api/accounts/**
+      SPRING_CLOUD_GATEWAY_ROUTES_1_ID: Fund-Transfer-service-gateway
+      SPRING_CLOUD_GATEWAY_ROUTES_1_URI: lb://Fund-Transfer-service
+      SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: Path=/api/funds/**
       LOGGING_LEVEL_ROOT: info
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CLOUD_GATEWAY: DEBUG
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/fintech-oauth2
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/realms/fintech-oauth2/protocol/openid-connect/certs
     networks:
       - fintech
 
-#  zipkin:
+
+  #  zipkin:
 #    image: openzipkin/zipkin
 #    container_name: zipkin
 #    ports:
@@ -270,4 +275,3 @@ volumes:
 networks:
   fintech:
     driver: bridge
-
