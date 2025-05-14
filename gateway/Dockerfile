@@ -1,6 +1,6 @@
 FROM openjdk:17-jdk-slim
 
-EXPOSE "8085:8085"
+EXPOSE "8086:8086"
 
 WORKDIR /app
 RUN apt-get update && apt-get install -y curl
