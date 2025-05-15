@@ -11,30 +11,30 @@ services:
     networks:
       - fintech
 
-#  configserver:
-#    image: nigglenandu/config-server
-#    container_name: configserver
-#    ports:
-#      - "8088:8088"
-#    restart: always
-#    environment:
-#      SPRING_PROFILES_ACTIVE: docker
-#      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
-#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
-#      EUREKA_CLIENT_FETCH_REGISTRY: "true"
-#    depends_on:
-#      - service-registry
-#    networks:
-#      - fintech
+  configserver:
+    image: nigglenandu/config-server
+    container_name: configserver
+    ports:
+      - "8088:8088"
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+    depends_on:
+      - service-registry
+    networks:
+      - fintech
 
-#  rabbitmq:
-#    image: rabbitmq:3-management
-#    container_name: rabbitmq
-#    ports:
-#      - 5672:5672
-#      - 15672:15672
-#    networks:
-#      - fintech
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - fintech
 
   account-service:
     image: nigglenandu/account-management-service
@@ -74,54 +74,54 @@ services:
     depends_on:
       - service-registry
       - mysql
-#      - zipkin
-#      - configserver
-#      - rabbitmq
+      - zipkin
+      - configserver
+      - rabbitmq
     networks:
       - fintech
 
-#  account-management-service-copy:
-#    image: nigglenandu/account-management-service
-#    container_name: account-management-service-copy
-#    ports:
-#      - "9081:9081"
-#    environment:
-#      SPRING_APPLICATION_NAME: Account-Management-Service-Copy
-#      SERVER_PORT: 9081
-#      SPRING_PROFILES_ACTIVE: docker
-#      SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8088
-#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/accountmanagementservice
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: 18@13sql
-#      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
-#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
-#      EUREKA_CLIENT_FETCH_REGISTRY: "true"
-#      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
-#      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_REGISTERHEALTHINDICATOR: "true"
-#      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_SLIDING_WINDOW_SIZE: 10
-#      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_MINIMUM_NUMBER_OF_CALLS: 5
-#      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_PERMITTED_NUMBER_OF_CALLS_IN_HALF_OPEN_STATE: 3
-#      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_WAIT_DURATION_IN_OPEN_STATE: 3s
-#      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_FAILURE_RATE_THRESHOLD: 50
-#      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_REGISTER_HEALTH_INDICATOR: "true"
-#      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_AUTOMATIC_TRANSITION_FROM_OPEN_TO_HALF_OPEN_ENABLED: "true"
-#      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_SLIDING_WINDOW_TYPE: count_based
-#      RESILIENCE4J_RETRY_INSTANCES_ACCOUNTSERVICEBREAKER_MAX_ATTEMPTS: 5
-#      RESILIENCE4J_RETRY_INSTANCES_ACCOUNTSERVICEBREAKER_WAIT_DURATION: 2s
-#      RESILIENCE4J_RATELIMITER_INSTANCES_ACCOUNTSERVICEBREAKER_TIMEOUT_DURATION: 0
-#      RESILIENCE4J_RATELIMITER_INSTANCES_ACCOUNTSERVICEBREAKER_LIMIT_REFRESH_PERIOD: 4s
-#      RESILIENCE4J_RATELIMITER_INSTANCES_ACCOUNTSERVICEBREAKER_LIMIT_FOR_PERIOD: 2
-#      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health
-#      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
-#      MANAGEMENT_HEALTH_CIRCUITBREAKERS_ENABLED: "true"
-#    depends_on:
-#      - service-registry
-#      - mysql
-#      - zipkin
-#      - configserver
-#      - rabbitmq
-#    networks:
-#      - fintech
+  account-management-service-copy:
+    image: nigglenandu/account-management-service
+    container_name: account-management-service-copy
+    ports:
+      - "9081:9081"
+    environment:
+      SPRING_APPLICATION_NAME: Account-Management-Service-Copy
+      SERVER_PORT: 9081
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_CONFIG_IMPORT: optional:configserver:http://configserver:8088
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/accountmanagementservice
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_REGISTERHEALTHINDICATOR: "true"
+      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_SLIDING_WINDOW_SIZE: 10
+      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_MINIMUM_NUMBER_OF_CALLS: 5
+      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_PERMITTED_NUMBER_OF_CALLS_IN_HALF_OPEN_STATE: 3
+      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_WAIT_DURATION_IN_OPEN_STATE: 3s
+      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_FAILURE_RATE_THRESHOLD: 50
+      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_REGISTER_HEALTH_INDICATOR: "true"
+      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_AUTOMATIC_TRANSITION_FROM_OPEN_TO_HALF_OPEN_ENABLED: "true"
+      RESILIENCE4J_CIRCUITBREAKER_INSTANCES_ACCOUNTSERVICEBREAKER_SLIDING_WINDOW_TYPE: count_based
+      RESILIENCE4J_RETRY_INSTANCES_ACCOUNTSERVICEBREAKER_MAX_ATTEMPTS: 5
+      RESILIENCE4J_RETRY_INSTANCES_ACCOUNTSERVICEBREAKER_WAIT_DURATION: 2s
+      RESILIENCE4J_RATELIMITER_INSTANCES_ACCOUNTSERVICEBREAKER_TIMEOUT_DURATION: 0
+      RESILIENCE4J_RATELIMITER_INSTANCES_ACCOUNTSERVICEBREAKER_LIMIT_REFRESH_PERIOD: 4s
+      RESILIENCE4J_RATELIMITER_INSTANCES_ACCOUNTSERVICEBREAKER_LIMIT_FOR_PERIOD: 2
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+      MANAGEMENT_HEALTH_CIRCUITBREAKERS_ENABLED: "true"
+    depends_on:
+      - service-registry
+      - mysql
+      - zipkin
+      - configserver
+      - rabbitmq
+    networks:
+      - fintech
 
   fund-service:
     image: nigglenandu/fund-transfer-service
@@ -132,8 +132,8 @@ services:
     depends_on:
       - service-registry
       - mysql
-#      - zipkin
-#      - rabbitmq
+      - zipkin
+      - rabbitmq
     networks:
       - fintech
     environment:
@@ -149,53 +149,53 @@ services:
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
-#  transaction-service:
-#    image: nigglenandu/transaction-history-service
-#    container_name: transaction-history-service
-#    ports:
-#      - "8084:8084"
-#    restart: always
-#    depends_on:
-#      - service-registry
-#      - mysql
-#      - zipkin
-#    networks:
-#      - fintech
-#    environment:
-#      SPRING_APPLICATION_NAME: Transaction-History-Service
-#      SERVER_PORT: 8084
-#      SPRING_PROFILES_ACTIVE: docker
-#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/transactionhistory
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: 18@13sql
-#      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
-#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
-#      EUREKA_CLIENT_FETCH_REGISTRY: "true"
-#      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
-#
-#  loan-service:
-#    image: nigglenandu/loan-transfer-service
-#    container_name: loan-service
-#    ports:
-#      - "8083:8083"
-#    restart: always
-#    depends_on:
-#      - service-registry
-#      - mysql
-#      - zipkin
-#    networks:
-#      - fintech
-#    environment:
-#      SPRING_APPLICATION_NAME: Loan-Transfer-Service
-#      SERVER_PORT: 8083
-#      SPRING_PROFILES_ACTIVE: docker
-#      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/loantransferservice
-#      SPRING_DATASOURCE_USERNAME: root
-#      SPRING_DATASOURCE_PASSWORD: 18@13sql
-#      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
-#      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
-#      EUREKA_CLIENT_FETCH_REGISTRY: "true"
-#      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+  transaction-service:
+    image: nigglenandu/transaction-history-service
+    container_name: transaction-history-service
+    ports:
+      - "8084:8084"
+    restart: always
+    depends_on:
+      - service-registry
+      - mysql
+      - zipkin
+    networks:
+      - fintech
+    environment:
+      SPRING_APPLICATION_NAME: Transaction-History-Service
+      SERVER_PORT: 8084
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/transactionhistory
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+
+  loan-service:
+    image: nigglenandu/loan-transfer-service
+    container_name: loan-service
+    ports:
+      - "8083:8083"
+    restart: always
+    depends_on:
+      - service-registry
+      - mysql
+      - zipkin
+    networks:
+      - fintech
+    environment:
+      SPRING_APPLICATION_NAME: Loan-Transfer-Service
+      SERVER_PORT: 8083
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/loantransferservice
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 18@13sql
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://service-registry:8761/eureka/
+      EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
+      EUREKA_CLIENT_FETCH_REGISTRY: "true"
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.1
@@ -239,6 +239,12 @@ services:
       SPRING_CLOUD_GATEWAY_ROUTES_1_ID: Fund-Transfer-service-gateway
       SPRING_CLOUD_GATEWAY_ROUTES_1_URI: lb://Fund-Transfer-service
       SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: Path=/api/funds/**
+      SPRING_CLOUD_GATEWAY_ROUTES_2_ID: Loan-Transfer-Service-gateway
+      SPRING_CLOUD_GATEWAY_ROUTES_2_URI: lb://Loan-Transfer-Service
+      SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0: Path=/api/loans/**
+      SPRING_CLOUD_GATEWAY_ROUTES_3_ID: Transaction-History-Service-gateway
+      SPRING_CLOUD_GATEWAY_ROUTES_3_URI: lb://Transaction-History-Service
+      SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0: Path=/api/transactions/**
       LOGGING_LEVEL_ROOT: DEBUG
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: TRACE
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY_OAUTH2: TRACE
@@ -248,14 +254,13 @@ services:
     networks:
       - fintech
 
-
-  #  zipkin:
-#    image: openzipkin/zipkin
-#    container_name: zipkin
-#    ports:
-#      - 9411:9411
-#    networks:
-#      - fintech
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - 9411:9411
+    networks:
+      - fintech
 
   mysql:
     image: mysql:8
@@ -432,5 +437,3 @@ networks:
 #networks:
 #  fintech:
 #    driver: bridge
-#
-#
