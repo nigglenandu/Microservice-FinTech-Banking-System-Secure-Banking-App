@@ -53,6 +53,10 @@ public class AccountController {
     public Optional<String> triggerFundTransfer(@RequestBody FundTransferRequestDto request) {
         return serviceAccount.transferFunds(request);
     }
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Account Service is running");
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id){
