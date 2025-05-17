@@ -16,25 +16,16 @@ public class FundTransferConsumer {
         logger.info("Received from RabbitMQ: {}", message);
 
         try {
-            // Here, add the actual message processing logic
             logger.info("Processing message: {}", message);
 
-            // Example: Calling an external API, updating the database, etc.
-            // Simulate processing here
-            // Example: restTemplate.getForObject("external-api-url", ResponseType.class);
-
-            // Simulate success
             logger.info("Message processed successfully.");
 
         } catch (HttpClientErrorException e) {
             logger.error("HTTP error while calling external API: {}", e.getMessage());
-            // Handle the error (e.g., retry, dead-letter queue, etc.)
         } catch (RestClientException e) {
             logger.error("RestClientException while calling external API: {}", e.getMessage());
-            // Handle the error (e.g., retry, dead-letter queue, etc.)
         } catch (Exception e) {
             logger.error("Unexpected error: {}", e.getMessage());
-            // Handle the error (e.g., logging, requeueing, etc.)
         }
     }
 }
