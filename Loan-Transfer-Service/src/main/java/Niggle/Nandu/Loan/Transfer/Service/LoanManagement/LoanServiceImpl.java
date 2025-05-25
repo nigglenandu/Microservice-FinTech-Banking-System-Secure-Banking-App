@@ -13,6 +13,8 @@ public class LoanServiceImpl implements IServiceLoan {
     @Autowired
     private LoanRepository loanRepository;
 
+    @Autowired
+
     @Override
     public Loan applyForLoan(Long userId, BigDecimal amount) {
         Loan loan = new Loan(null, userId, amount, "PENDING", LocalDate.now(), null);

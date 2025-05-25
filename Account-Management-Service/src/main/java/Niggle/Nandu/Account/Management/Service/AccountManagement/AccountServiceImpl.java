@@ -1,6 +1,5 @@
 package Niggle.Nandu.Account.Management.Service.AccountManagement;
 
-import Niggle.Nandu.Account.Management.Service.messaging.FundTransferProducer;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.transaction.Transactional;
