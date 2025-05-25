@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "Fund-Transfer-Service", url = "${Fund-Transfer-Service.url}")
-public class FundTransferClient {
+public interface FundTransferClient {
     @PostMapping("/transfer")
-    ResponseEntity<String> transferFunds(@RequestBody FundTransferRequestDto request)
+    ResponseEntity<String> transferFunds(@RequestBody FundTransferRequestDto request);
 }

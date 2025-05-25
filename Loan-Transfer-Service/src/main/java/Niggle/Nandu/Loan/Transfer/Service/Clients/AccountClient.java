@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
         url ="${Account-Management-Service.url}")
 public interface AccountClient {
     @GetMapping("api/accounts/by-number/{accountNumber}")
-    AccountDto getAccountByNumber(@PathVariable String accountNumber);
+    ResponseEntity<AccountDto> getAccountByNumber(@PathVariable String accountNumber);
 }
 

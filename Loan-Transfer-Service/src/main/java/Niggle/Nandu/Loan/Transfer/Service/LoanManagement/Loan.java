@@ -23,17 +23,18 @@ public class Loan {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "loan")
     private List<LoanRepaymentSchedule> repaymentSchedule;
 
-    public Loan(BigDecimal amount, LocalDate applicationDate, LocalDate approvalDate, Integer creditScore, Long id, BigDecimal interestRate, List<LoanRepaymentSchedule> repaymentSchedule, String status, Long userId) {
+    public Loan(Long id, Long userId, BigDecimal amount, BigDecimal interestRate, String status,
+                LocalDate applicationDate, LocalDate approvalDate, Integer creditScore) {
+        this.id = id;
+        this.userId = userId;
         this.amount = amount;
+        this.interestRate = interestRate;
+        this.status = status;
         this.applicationDate = applicationDate;
         this.approvalDate = approvalDate;
         this.creditScore = creditScore;
-        this.id = id;
-        this.interestRate = interestRate;
-        this.repaymentSchedule = repaymentSchedule;
-        this.status = status;
-        this.userId = userId;
     }
+
 
     public Loan() {
     }

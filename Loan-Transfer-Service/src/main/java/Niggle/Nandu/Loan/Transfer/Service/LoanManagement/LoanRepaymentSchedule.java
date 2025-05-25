@@ -19,16 +19,17 @@ public class LoanRepaymentSchedule {
     private LocalDate dueDate;
     private String status;
 
-    public LoanRepaymentSchedule(LocalDate dueDate, Long id, BigDecimal installmentAmount, Loan loan, String status) {
-        this.dueDate = dueDate;
-        this.id = id;
-        this.installmentAmount = installmentAmount;
-        this.loan = loan;
-        this.status = status;
-    }
 
     public LoanRepaymentSchedule() {
     }
+
+    public LoanRepaymentSchedule(Loan loan, BigDecimal installmentAmount, LocalDate dueDate, String status) {
+        this.loan = loan;
+        this.installmentAmount = installmentAmount;
+        this.dueDate = dueDate;
+        this.status = status;
+    }
+
 
     public LocalDate getDueDate() {
         return dueDate;
