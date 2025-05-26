@@ -1,5 +1,6 @@
 package Niggle.Nandu.Loan.Transfer.Service.LoanManagement;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ public class LoanRepaymentSchedule {
 
     @ManyToOne
     @JoinColumn(name = "loan_id")
+    @JsonBackReference
     private Loan loan;
 
     private BigDecimal installmentAmount;

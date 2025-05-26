@@ -1,4 +1,4 @@
-package Niggle.Nandu.Fund.Transfer.Service.message;
+package Niggle.Nandu.Account.Management.Service.messaging;
 
 import org.springframework.amqp.core.*;
 import org.springframework.context.annotation.Bean;

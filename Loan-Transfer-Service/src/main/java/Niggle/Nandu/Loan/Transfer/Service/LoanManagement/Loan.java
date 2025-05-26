@@ -1,5 +1,6 @@
 package Niggle.Nandu.Loan.Transfer.Service.LoanManagement;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public class Loan {
     private Integer creditScore;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "loan")
+    @JsonManagedReference
     private List<LoanRepaymentSchedule> repaymentSchedule;
 
     public Loan(Long id, Long userId, BigDecimal amount, BigDecimal interestRate, String status,

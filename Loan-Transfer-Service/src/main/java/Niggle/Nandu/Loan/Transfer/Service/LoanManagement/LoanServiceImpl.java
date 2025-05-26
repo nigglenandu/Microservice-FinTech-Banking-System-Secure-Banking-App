@@ -35,6 +35,8 @@ public class LoanServiceImpl implements IServiceLoan {
 
     private static final String LOAN_SERVICE = "loanServiceBreaker";
     private static final String BANK_RESERVE_ACCOUNT = "BANK_RESERVE_001";
+    @Autowired
+    private LoanRepaymentScheduleRepo loanRepaymentScheduleRepo;
 
     @Override
     public Loan applyForLoan(Long userId, BigDecimal amount) {
@@ -97,7 +99,7 @@ public class LoanServiceImpl implements IServiceLoan {
                         throw new RuntimeException("Loan is not approved");
                     }
 
-                    List<LoanRepaymentSchedule> schedules = loanRepository.findByLoanId(loanId);
+                    List<LoanRepaymentSchedule> schedules = loanRepaymentScheduleRepo.findByLoanId(loanId);
                     LoanRepaymentSchedule nextPayment = schedules.stream()
                             .filter(s -> "PENDING".equals(s.getStatus()))
                             .findFirst()
@@ -140,7 +142,7 @@ public class LoanServiceImpl implements IServiceLoan {
     }
 
     public List<LoanRepaymentSchedule> getRepaymentSchedules(Long loanId) {
-        return loanRepository.findByLoanId(loanId);
+        return loanRepaymentScheduleRepo.findByLoanId(loanId);
     }
 
     private List<LoanRepaymentSchedule> generateRepaymentSchedule(Loan loan) {
