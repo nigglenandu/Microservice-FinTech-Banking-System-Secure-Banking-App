@@ -8,6 +8,7 @@ import Niggle.Nandu.Loan.Transfer.Service.Dto.FundTransferRequestDto;
 import Niggle.Nandu.Loan.Transfer.Service.Messaging.LoanNotificationProducer;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,17 +66,24 @@ public class LoanServiceImpl implements IServiceLoan {
     @Override
     @CircuitBreaker(name = LOAN_SERVICE, fallbackMethod = "approveLoanFallback")
     @Retry(name = LOAN_SERVICE)
+    @Transactional
     public Optional<Loan> approveLoan(Long loanId) {
-        return loanRepository.findById(loanId)
-                .map(loan -> {
-                    loan.setStatus("APPROVED");
-                    loan.setApprovalDate(LocalDate.now());
-                    loan = loanRepository.save(loan);
+        Optional<Loan> loanOpt = loanRepository.findById(loanId);
+        if (loanOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        Loan loan = loanOpt.get();
+        loan.setStatus("APPROVED");
+        loan.setApprovalDate(LocalDate.now());
+        loan = loanRepository.save(loan);
 
-                    disburseLoanAmount(loan);
-                    notificationProducer.sendNotification("Loan " + loan.getId() + " approved for user " + loan.getUserId());
-                    return loan;
-                });
+        try {
+            disburseLoanAmount(loan);
+            notificationProducer.sendNotification("Loan " + loan.getId() + " approved and disbursed for user " + loan.getUserId());
+        } catch (Exception e) {
+            notificationProducer.sendNotification("Loan approved but disbursement failed for loan " + loan.getId() + ": " + e.getMessage());
+        }
+        return Optional.of(loan);
     }
 
     @Override

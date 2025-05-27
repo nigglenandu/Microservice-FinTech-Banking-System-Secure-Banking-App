@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class Loan {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private Long userId;
@@ -21,7 +21,7 @@ public class Loan {
     private LocalDate approvalDate;
     private Integer creditScore;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "loan")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "loan", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<LoanRepaymentSchedule> repaymentSchedule;
 

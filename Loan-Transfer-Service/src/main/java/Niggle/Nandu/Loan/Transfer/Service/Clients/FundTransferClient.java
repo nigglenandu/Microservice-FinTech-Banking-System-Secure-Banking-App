@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "Fund-Transfer-Service", url = "${Fund-Transfer-Service.url}")
 public interface FundTransferClient {
-    @PostMapping("/transfer")
+    @PostMapping("/api/funds/transfer")
     ResponseEntity<String> transferFunds(@RequestBody FundTransferRequestDto request);
 }
