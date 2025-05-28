@@ -9,6 +9,8 @@ import Niggle.Nandu.Loan.Transfer.Service.Messaging.LoanNotificationProducer;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,7 @@ import java.util.Optional;
 
 @Service
 public class LoanServiceImpl implements IServiceLoan {
+    private static final Logger log = LoggerFactory.getLogger(LoanServiceImpl.class);
     @Autowired
     private LoanRepository loanRepository;
 
@@ -83,6 +86,7 @@ public class LoanServiceImpl implements IServiceLoan {
         } catch (Exception e) {
             notificationProducer.sendNotification("Loan approved but disbursement failed for loan " + loan.getId() + ": " + e.getMessage());
         }
+        log.warn("Loan ID {} not found!", loanId);
         return Optional.of(loan);
     }
 
