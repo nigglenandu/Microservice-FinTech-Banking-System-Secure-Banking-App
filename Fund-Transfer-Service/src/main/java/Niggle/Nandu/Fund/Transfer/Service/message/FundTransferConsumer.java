@@ -11,7 +11,7 @@ import org.springframework.web.client.RestClientException;
 public class FundTransferConsumer {
     private static final Logger logger = LoggerFactory.getLogger(FundTransferConsumer.class);
 
-    @RabbitListener(queues = "fund_transfer_queue")
+    @RabbitListener(queues = "fund.transfers.queue")
     public void receiveMessage(String message) {
         logger.info("Received from RabbitMQ: {}", message);
 

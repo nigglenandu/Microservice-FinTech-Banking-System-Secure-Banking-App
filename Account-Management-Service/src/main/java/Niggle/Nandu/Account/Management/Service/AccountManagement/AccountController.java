@@ -1,6 +1,8 @@
 package Niggle.Nandu.Account.Management.Service.AccountManagement;
 
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
+    private static final Logger log = LoggerFactory.getLogger(AccountController.class);
 
     private final IServiceAccount serviceAccount;
 
@@ -37,6 +40,7 @@ public class AccountController {
 
     @GetMapping("by-number/{accountNumber}")
     public ResponseEntity<Account> getAccountByNumber(@PathVariable String accountNumber){
+        log.info("Fetching account with number: {}", accountNumber);
         return serviceAccount.getAccountByNumber(accountNumber)
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));

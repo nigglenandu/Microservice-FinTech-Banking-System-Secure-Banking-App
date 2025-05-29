@@ -69,36 +69,28 @@ public class AccountServiceImpl implements IServiceAccount {
         }
     }
 
-    @Transactional
     @Override
+    @Transactional
     public Optional<String> transferFunds(FundTransferRequestDto request) {
-        return accountRepository.findByAccountNumber(request.getFromAccountNumber())
-                .filter(sender -> request.getAmount().compareTo(BigDecimal.ZERO) > 0)
-                .filter(sender -> sender.getBalance().compareTo(request.getAmount()) >= 0)
-                .flatMap(sender -> {
-                    if (!request.isExternalTransfer()) {
-                        sender.setBalance(sender.getBalance().subtract(request.getAmount()));
-                        accountRepository.save(sender);
+        try {
+            Account sender = accountRepository.findByAccountNumber(request.getFromAccountNumber())
+                    .orElseThrow(() -> new RuntimeException("Sender account not found"));
+            Account receiver = accountRepository.findByAccountNumber(request.getToAccountNumber())
+                    .orElseThrow(() -> new RuntimeException("Receiver account not found"));
 
-                        fundTransferProducer.sendTransferMessage("Funds transferred: From " + request.getFromAccountNumber() +
-                                " to " + request.getToAccountNumber() + ", Amount: " + request.getAmount());
+            if (sender.getBalance().compareTo(request.getAmount()) < 0) {
+                return Optional.of("Transfer failed: Insufficient funds");
+            }
 
-                        return Optional.of(processInternalTransfer(request));
-                    } else {
-                        Optional<String> externalResponse = processExternalTransfer(request);
-                        if(externalResponse.isPresent() && externalResponse.get().toLowerCase().contains("success")) {
-                            sender.setBalance(sender.getBalance().subtract(request.getAmount()));
-                            accountRepository.save(sender);
+            sender.setBalance(sender.getBalance().subtract(request.getAmount()));
+            receiver.setBalance(receiver.getBalance().add(request.getAmount()));
+            accountRepository.save(sender);
+            accountRepository.save(receiver);
 
-                            fundTransferProducer.sendTransferMessage("Funds transferred: From " + request.getFromAccountNumber() +
-                                    " to " + request.getToAccountNumber() + ", Amount: " + request.getAmount());
-
-                            return Optional.of("Transfer successful: External");
-                        } else {
-                            return Optional.of("Failed: External transfer error");
-                        }
-                    }
-                });
+            return Optional.of("Transfer successful");
+        } catch (Exception e) {
+            return Optional.of("Transfer failed: " + e.getMessage());
+        }
     }
 
     private String processInternalTransfer(FundTransferRequestDto request){
