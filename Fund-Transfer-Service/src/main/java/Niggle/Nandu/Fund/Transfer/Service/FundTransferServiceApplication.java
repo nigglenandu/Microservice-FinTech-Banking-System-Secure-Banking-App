@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 @SpringBootApplication
 @EnableDiscoveryClient
-public class FundTransferServiceApplication {
+public class   FundTransferServiceApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FundTransferServiceApplication.class, args);

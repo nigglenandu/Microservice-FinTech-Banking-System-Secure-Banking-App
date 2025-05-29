@@ -55,8 +55,18 @@ public class AccountController {
 
     @PostMapping("/funds/transfer")
     public Optional<String> triggerFundTransfer(@RequestBody FundTransferRequestDto request) {
+        log.info("Received transfer request: {}", request);
+        if (request.getFromAccountNumber() == null) {
+            log.error("fromAccountNumber is null in request: {}", request);
+            return Optional.of("Transfer failed: Invalid fromAccountNumber");
+        }
+        if (request.getToAccountNumber() == null) {
+            log.error("toAccountNumber is null in request: {}", request);
+            return Optional.of("Transfer failed: Invalid toAccountNumber");
+        }
         return serviceAccount.transferFunds(request);
     }
+    
     @GetMapping("/test")
     public ResponseEntity<String> test() {
         return ResponseEntity.ok("Account Service is running");

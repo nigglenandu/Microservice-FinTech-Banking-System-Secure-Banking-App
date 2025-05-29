@@ -1,19 +1,25 @@
 package Niggle.Nandu.Account.Management.Service.AccountManagement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 
 public class FundTransferRequestDto {
+    @JsonProperty("fromAccount")
     private String fromAccountNumber;
+
+    @JsonProperty("toAccount")
     private String toAccountNumber;
+
+    @JsonProperty("amount")
     private BigDecimal amount;
+
+    @JsonProperty("isExternalTransfer")
     private boolean isExternalTransfer;
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
+    @JsonProperty("isCredit")
+    private boolean isCredit;
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public FundTransferRequestDto() {
     }
 
     public String getFromAccountNumber() {
@@ -24,19 +30,46 @@ public class FundTransferRequestDto {
         this.fromAccountNumber = fromAccountNumber;
     }
 
-    public boolean isExternalTransfer() {
-        return isExternalTransfer;
-    }
-
-    public void setExternalTransfer(boolean externalTransfer) {
-        isExternalTransfer = externalTransfer;
-    }
-
     public String getToAccountNumber() {
         return toAccountNumber;
     }
 
     public void setToAccountNumber(String toAccountNumber) {
         this.toAccountNumber = toAccountNumber;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public boolean isExternalTransfer() {
+        return isExternalTransfer;
+    }
+
+    public void setExternalTransfer(boolean externalTransfer) {
+        this.isExternalTransfer = externalTransfer;
+    }
+
+    public boolean isCredit() {
+        return isCredit;
+    }
+
+    public void setCredit(boolean credit) {
+        this.isCredit = credit;
+    }
+
+    @Override
+    public String toString() {
+        return "FundTransferRequestDto{" +
+                "fromAccountNumber='" + fromAccountNumber + '\'' +
+                ", toAccountNumber='" + toAccountNumber + '\'' +
+                ", amount=" + amount +
+                ", isExternalTransfer=" + isExternalTransfer +
+                ", isCredit=" + isCredit +
+                '}';
     }
 }
