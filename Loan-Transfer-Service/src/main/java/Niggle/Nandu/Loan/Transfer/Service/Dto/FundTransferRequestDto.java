@@ -7,12 +7,14 @@ public class FundTransferRequestDto {
     private String toAccountNumber;
     private BigDecimal amount;
     private boolean isExternalTransfer;
+    private boolean isCredit;
 
-    public FundTransferRequestDto(BigDecimal amount, String fromAccountNumber, boolean isExternalTransfer, String toAccountNumber) {
+    public FundTransferRequestDto(BigDecimal amount, String fromAccountNumber, String toAccountNumber, boolean isExternalTransfer, boolean isCredit) {
         this.amount = amount;
         this.fromAccountNumber = fromAccountNumber;
-        this.isExternalTransfer = isExternalTransfer;
         this.toAccountNumber = toAccountNumber;
+        this.isExternalTransfer = isExternalTransfer;
+        this.isCredit = isCredit;
     }
 
     public BigDecimal getAmount() {
@@ -29,6 +31,14 @@ public class FundTransferRequestDto {
 
     public void setFromAccountNumber(String fromAccountNumber) {
         this.fromAccountNumber = fromAccountNumber;
+    }
+
+    public boolean isCredit() {
+        return isCredit;
+    }
+
+    public void setCredit(boolean credit) {
+        isCredit = credit;
     }
 
     public boolean isExternalTransfer() {

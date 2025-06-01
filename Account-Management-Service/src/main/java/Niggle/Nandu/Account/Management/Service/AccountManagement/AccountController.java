@@ -72,7 +72,7 @@ public class AccountController {
         return ResponseEntity.ok("Account Service is running");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id){
         if(serviceAccount.deleteAccountById(id)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

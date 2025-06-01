@@ -120,9 +120,10 @@ public class LoanServiceImpl implements IServiceLoan {
                     String userAccountNumber = fetchUserAccountNumber(loan.getUserId());
                     FundTransferRequestDto transferRequest = new FundTransferRequestDto(
                             nextPayment.getInstallmentAmount(),
+                            BANK_RESERVE_ACCOUNT,
                             userAccountNumber,
                             true,
-                            BANK_RESERVE_ACCOUNT
+                            true
                     );
 
                     ResponseEntity<String> transferResult = fundTransferClient.transferFunds(transferRequest);
@@ -180,8 +181,9 @@ public class LoanServiceImpl implements IServiceLoan {
         FundTransferRequestDto transferRequest = new FundTransferRequestDto(
                 loan.getAmount(),
                 BANK_RESERVE_ACCOUNT,
+                userAccountNumber,
                 true,
-                userAccountNumber
+                true
         );
 
         ResponseEntity<String> transferResult = fundTransferClient.transferFunds(transferRequest);
