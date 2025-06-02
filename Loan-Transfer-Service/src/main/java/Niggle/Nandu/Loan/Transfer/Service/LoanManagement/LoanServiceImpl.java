@@ -121,9 +121,9 @@ public class LoanServiceImpl implements IServiceLoan {
                     FundTransferRequestDto transferRequest = new FundTransferRequestDto(
                             nextPayment.getInstallmentAmount(),
                             BANK_RESERVE_ACCOUNT,
-                            userAccountNumber,
                             true,
-                            true
+                            false,
+                            userAccountNumber
                     );
 
                     ResponseEntity<String> transferResult = fundTransferClient.transferFunds(transferRequest);
@@ -181,18 +181,25 @@ public class LoanServiceImpl implements IServiceLoan {
         FundTransferRequestDto transferRequest = new FundTransferRequestDto(
                 loan.getAmount(),
                 BANK_RESERVE_ACCOUNT,
-                userAccountNumber,
                 true,
-                true
+                true,
+                userAccountNumber
+
         );
 
         ResponseEntity<String> transferResult = fundTransferClient.transferFunds(transferRequest);
-        if (transferResult.getStatusCode() != HttpStatus.OK || transferResult.getBody() == null ||
+
+        System.out.println("Status Code: " + transferResult.getStatusCode());
+        System.out.println("Response Body: " + transferResult.getBody());
+
+        if (transferResult.getStatusCode() != HttpStatus.OK ||
+                transferResult.getBody() == null ||
                 !transferResult.getBody().toLowerCase().contains("success")) {
+
             notificationProducer.sendNotification("Loan disbursement failed for loan " + loan.getId());
             throw new RuntimeException("Loan disbursement failed");
         }
-        notificationProducer.sendNotification("Loan amount disbursed for loan " + loan.getId());
+
     }
 
     private Integer fetchCreditScore(Long userId) {
