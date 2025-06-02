@@ -112,21 +112,24 @@ public class LoanServiceImpl implements IServiceLoan {
                     }
 
                     List<LoanRepaymentSchedule> schedules = loanRepaymentScheduleRepo.findByLoanId(loanId);
+
                     LoanRepaymentSchedule nextPayment = schedules.stream()
                             .filter(s -> "PENDING".equals(s.getStatus()))
                             .findFirst()
                             .orElseThrow(() -> new RuntimeException("No pending repayments"));
 
                     String userAccountNumber = fetchUserAccountNumber(loan.getUserId());
+
                     FundTransferRequestDto transferRequest = new FundTransferRequestDto(
                             nextPayment.getInstallmentAmount(),
-                            BANK_RESERVE_ACCOUNT,
+                            userAccountNumber,
                             true,
                             false,
-                            userAccountNumber
+                            BANK_RESERVE_ACCOUNT
                     );
 
                     ResponseEntity<String> transferResult = fundTransferClient.transferFunds(transferRequest);
+
                     if (transferResult.getStatusCode() != HttpStatus.OK || transferResult.getBody() == null ||
                             !transferResult.getBody().toLowerCase().contains("success")) {
                         notificationProducer.sendNotification("Repayment failed for loan " + loan.getId());
@@ -134,9 +137,8 @@ public class LoanServiceImpl implements IServiceLoan {
                     }
 
                     nextPayment.setStatus("PAID");
-                    loanRepository.save(loan);
+                    loanRepaymentScheduleRepo.save(nextPayment);
                     notificationProducer.sendNotification("Repayment processed for loan " + loan.getId());
-
                     boolean allPaid = schedules.stream().allMatch(s -> "PAID".equals(s.getStatus()));
                     if (allPaid) {
                         loan.setStatus("REPAID");
@@ -147,6 +149,7 @@ public class LoanServiceImpl implements IServiceLoan {
                     return loan;
                 });
     }
+
 
     @Override
     public Optional<List<Loan>> getLoansByUser(Long userId) {

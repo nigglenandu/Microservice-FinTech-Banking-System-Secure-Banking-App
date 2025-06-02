@@ -20,7 +20,6 @@ public class FundTransferRequestDto {
     @JsonProperty("isCredit")
     private boolean isCredit;
 
-
     public FundTransferRequestDto(BigDecimal amount, String fromAccountNumber, boolean isCredit, boolean isExternalTransfer, String toAccountNumber) {
         this.amount = amount;
         this.fromAccountNumber = fromAccountNumber;
