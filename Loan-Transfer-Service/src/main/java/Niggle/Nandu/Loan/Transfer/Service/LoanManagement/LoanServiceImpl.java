@@ -145,7 +145,6 @@ public class LoanServiceImpl implements IServiceLoan {
                         loan = loanRepository.save(loan);
                         notificationProducer.sendNotification("Loan " + loan.getId() + " fully repaid");
                     }
-
                     return loan;
                 });
     }

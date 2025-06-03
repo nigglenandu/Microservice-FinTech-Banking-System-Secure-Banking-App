@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface LoanRepaymentScheduleRepo extends JpaRepository<LoanRepaymentSchedule, Long> {
     List<LoanRepaymentSchedule> findByLoanId(Long loanId);
+
+    void deleteByLoanId(Long id);
+
 }
