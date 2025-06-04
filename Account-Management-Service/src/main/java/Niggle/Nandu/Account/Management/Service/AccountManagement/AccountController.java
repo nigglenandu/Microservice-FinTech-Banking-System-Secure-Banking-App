@@ -1,8 +1,15 @@
 package Niggle.Nandu.Account.Management.Service.AccountManagement;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/accounts")
+@Tag(name = "Account Management", description = "APIs for managing accounts and fund transfers")
 public class AccountController {
     private static final Logger log = LoggerFactory.getLogger(AccountController.class);
 
@@ -22,6 +30,11 @@ public class AccountController {
     }
 
     @PostMapping("/create")
+    @Operation(summary = "Create a new account", description = "Create a new account with the provided details.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Account created successfully", content = @Content(schema = @Schema(implementation = Account.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid account data", content = @Content)
+    })
     public ResponseEntity<Account> createAccount(@Valid @RequestBody Account account){
         return new ResponseEntity<>(serviceAccount.addAccount(account), HttpStatus.CREATED);
     }
