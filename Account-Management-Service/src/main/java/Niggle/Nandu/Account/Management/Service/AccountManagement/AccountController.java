@@ -40,11 +40,23 @@ public class AccountController {
     }
 
     @GetMapping("/all")
+    @Operation(summary = "Get all accounts", description = "Retrieves a list of all accounts.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of accounts retrieved",
+            content = @Content(schema = @Schema(implementation = Account.class,
+            type = "array ")))
+    })
     public ResponseEntity<List<Account>> getAllAccounts(){
         return new ResponseEntity<>(serviceAccount.getAllAccount(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get account by ID", description = "Fetches an account by its unique ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode ="200",  description= "Account found",
+            content= @Content(schema = @Schema(implementation = Account.class))),
+            @ApiResponse(responseCode = "400", description = "Account not found", content = @Content)
+    })
     public ResponseEntity<Account> getAccountById(@PathVariable Long id){
         return serviceAccount.getAccountById(id)
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
@@ -52,6 +64,12 @@ public class AccountController {
     }
 
     @GetMapping("by-number/{accountNumber}")
+    @Operation(summary = "Get account by account number", description = "Fetches an account by its unique account number.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Account found",
+            content = @Content(schema = @Schema(implementation = Account.class))),
+            @ApiResponse(responseCode = "400", description = "Account not found", content = @Content)
+    })
     public ResponseEntity<Account> getAccountByNumber(@PathVariable String accountNumber){
         log.info("Fetching account with number: {}", accountNumber);
         return serviceAccount.getAccountByNumber(accountNumber)
@@ -60,6 +78,13 @@ public class AccountController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update account by ID", description = "Updates an existing account identified by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Account updated successfully",
+                    content = @Content(schema = @Schema(implementation = Account.class))),
+            @ApiResponse(responseCode = "404", description = "Account not found", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Invalid account data", content = @Content)
+    })
     public ResponseEntity<Account> updateAccount(@PathVariable Long id, @Valid @RequestBody Account account) {
         return serviceAccount.updateAccountById(id, account)
                 .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
@@ -67,6 +92,12 @@ public class AccountController {
     }
 
     @PostMapping("/funds/transfer")
+    @Operation(summary = "Transfer funds", description = "Initiates a fund transfer between two accounts.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Transfer initiated successfully",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid transfer request", content = @Content)
+    })
     public Optional<String> triggerFundTransfer(@RequestBody FundTransferRequestDto request) {
         log.info("Received transfer request: {}", request);
         if (request.getFromAccountNumber() == null) {
@@ -81,11 +112,21 @@ public class AccountController {
     }
     
     @GetMapping("/test")
+    @Operation(summary = "Test service", description = "Checks if the account service is running.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Service is running",
+                    content = @Content(schema = @Schema(implementation = String.class)))
+    })
     public ResponseEntity<String> test() {
         return ResponseEntity.ok("Account Service is running");
     }
 
     @DeleteMapping("delete/{id}")
+    @Operation(summary = "Delete account by ID", description = "Deletes an account identified by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Account deleted successfully", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Account not found", content = @Content)
+    })
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id){
         if(serviceAccount.deleteAccountById(id)){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

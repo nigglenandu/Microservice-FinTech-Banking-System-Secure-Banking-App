@@ -1,22 +1,36 @@
 package Niggle.Nandu.Account.Management.Service.AccountManagement;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.math.BigDecimal;
 
+@Schema(description = "Request object for fund transfer between accounts")
 public class FundTransferRequestDto {
     @JsonProperty("fromAccount")
+    @NotNull
+    @Schema(description = "Account number to transfer funds from", example = "USER_ACC_1")
     private String fromAccountNumber;
 
     @JsonProperty("toAccount")
+    @NotNull
+    @Schema(description = "Account number to transfer funds to", example = "USER_ACC_2")
     private String toAccountNumber;
 
     @JsonProperty("amount")
+    @NotNull
+    @Positive
+    @Schema(description = "Amount to transfer", example = "100.00")
     private BigDecimal amount;
 
     @JsonProperty("isExternalTransfer")
+    @Schema(description = "Indicates if the transfer is external", example = "false")
     private boolean isExternalTransfer;
 
     @JsonProperty("isCredit")
+    @Schema(description = "Indicates if the transfer is a credit transaction", example = "false")
     private boolean isCredit;
 
     public FundTransferRequestDto() {
