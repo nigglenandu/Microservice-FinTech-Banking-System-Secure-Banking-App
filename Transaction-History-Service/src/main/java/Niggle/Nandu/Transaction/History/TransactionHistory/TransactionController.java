@@ -1,6 +1,7 @@
 package Niggle.Nandu.Transaction.History.TransactionHistory;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/transactions")
 @Tag(name = "Transaction History", description = "APIs for retrieving transaction history")
 public class TransactionController {
+
     @Autowired
     private IServiceTransaction serviceTransaction;
 
@@ -25,7 +27,10 @@ public class TransactionController {
                     content = @Content(schema = @Schema(implementation = Page.class))),
             @ApiResponse(responseCode = "404", description = "Account not found or no transactions", content = @Content)
     })
-    private ResponseEntity<Page<Transaction>> getTransactionHistory(@PathVariable Long accountId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<Page<Transaction>> getTransactionHistory(
+            @PathVariable @Parameter(description = "Account ID") Long accountId,
+            @RequestParam(defaultValue = "0") @Parameter(description = "Page number (0-based)") int page,
+            @RequestParam(defaultValue = "10") @Parameter(description = "Number of transactions per page") int size) {
         return ResponseEntity.ok(serviceTransaction.getTransactionHistory(accountId, page, size));
     }
 
@@ -36,7 +41,11 @@ public class TransactionController {
                     content = @Content(schema = @Schema(implementation = Page.class))),
             @ApiResponse(responseCode = "404", description = "Account not found or no transactions of specified type", content = @Content)
     })
-    private ResponseEntity<Page<Transaction>> searchTransactionByType(@PathVariable Long accountId, @RequestParam String type, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+    public ResponseEntity<Page<Transaction>> searchTransactionByType(
+            @PathVariable @Parameter(description = "Account ID") Long accountId,
+            @RequestParam @Parameter(description = "Transaction type (e.g., DEPOSIT, WITHDRAWAL, TRANSFER)") String type,
+            @RequestParam(defaultValue = "0") @Parameter(description = "Page number (0-based)") int page,
+            @RequestParam(defaultValue = "10") @Parameter(description = "Number of transactions per page") int size) {
         return ResponseEntity.ok(serviceTransaction.searchTransactionByType(accountId, type, page, size));
     }
 }
