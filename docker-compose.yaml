@@ -69,6 +69,8 @@ services:
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health
       MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
       MANAGEMENT_HEALTH_CIRCUITBREAKERS_ENABLED: "true"
+      SPRINGDOC.API-DOCS.ENABLED: "true"
+      SPRINGDOC.SWAGGER-UI.ENABLED: "true"
     ports:
       - "8087:8087"
     depends_on:
@@ -114,6 +116,8 @@ services:
       MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health
       MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
       MANAGEMENT_HEALTH_CIRCUITBREAKERS_ENABLED: "true"
+      SPRINGDOC.API-DOCS.ENABLED: "true"
+      SPRINGDOC.SWAGGER-UI.ENABLED: "true"
     depends_on:
       - service-registry
       - mysql
@@ -148,6 +152,8 @@ services:
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+      SPRINGDOC.API-DOCS.ENABLED: "true"
+      SPRINGDOC.SWAGGER-UI.ENABLED: "true"
 
   transaction-service:
     image: nigglenandu/transaction-history-service
@@ -172,6 +178,8 @@ services:
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+      SPRINGDOC.API-DOCS.ENABLED: "true"
+      SPRINGDOC.SWAGGER-UI.ENABLED: "true"
 
   loan-service:
     image: nigglenandu/loan-transfer-service
@@ -196,6 +204,8 @@ services:
       EUREKA_CLIENT_REGISTER_WITH_EUREKA: "true"
       EUREKA_CLIENT_FETCH_REGISTRY: "true"
       MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+      SPRINGDOC.API-DOCS.ENABLED: "true"
+      SPRINGDOC.SWAGGER-UI.ENABLED: "true"
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.1
