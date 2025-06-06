@@ -1,6 +1,12 @@
 package Niggle.Nandu.Fund.Transfer.Service.FundTransfer;
 
 import Niggle.Nandu.Fund.Transfer.Service.Service.FundTransferService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/funds")
+@Tag(name = "Fund Transfer", description = "APIs for fund transfers")
 public class FundTransferController {
     private static final Logger log = LoggerFactory.getLogger(FundTransferController.class);
 
@@ -24,6 +31,15 @@ public class FundTransferController {
     private FundTransferService fundTransferService;
 
     @PostMapping("/transfer")
+    @Operation(summary = "Transfer funds between accounts", description = "Initiates a fund transfer based on the provided request, handling both internal and external transfers.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Transfer completed successfully",
+                    content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid transfer request or validation errors",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error",
+                    content = @Content)
+    })
     public ResponseEntity<String> transferFunds(@RequestBody @Valid FundTransferRequest request, BindingResult bindingResult) {
         log.info("Received transfer request: {}", request);
         if (bindingResult.hasErrors()) {
